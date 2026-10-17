@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://dc25ph04e7nq5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
+size = Vector2(16, 220)
+
+[node name="ElectricalBarrier" type="Area2D" unique_id=295602388]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2044043567]
+shape = SubResource("RectangleShape2D_epxd5")
+
+[node name="Visual" type="Polygon2D" parent="." unique_id=340837997]
+polygon = PackedVector2Array(-8, -110, 8, -110, 8, 110, -8, 110)
