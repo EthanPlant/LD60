@@ -1,47 +1,34 @@
 [gd_scene format=3 uid="uid://dxgfnodt5g7s6"]
 
 [ext_resource type="Script" uid="uid://c014d6i0bxm6s" path="res://scripts/main.gd" id="1_jyhfs"]
-[ext_resource type="PackedScene" uid="uid://b8y02c78mib4c" path="res://scenes/player.tscn" id="1_o5qli"]
-[ext_resource type="PackedScene" uid="uid://buqhc457phf5q" path="res://scenes/pressure_plate.tscn" id="2_sugp2"]
-[ext_resource type="PackedScene" uid="uid://c4olje064x3jm" path="res://scenes/door.tscn" id="3_jyhfs"]
-[ext_resource type="Script" uid="uid://b73pxe11uesnk" path="res://scripts/tape_recorder.gd" id="5_tbgi4"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
-size = Vector2(960, 100)
 
 [node name="Main" type="Node2D" unique_id=1507109919]
 script = ExtResource("1_jyhfs")
 
-[node name="Floor" type="StaticBody2D" parent="." unique_id=723629486]
-position = Vector2(480, 490)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=1625195843]
-shape = SubResource("RectangleShape2D_epxd5")
-
-[node name="Visual" type="Polygon2D" parent="Floor" unique_id=233176641]
-color = Color(0.20784314, 0.2784314, 0.36862746, 1)
-polygon = PackedVector2Array(-480, -50, 480, -50, 480, 50, -480, 50)
-
-[node name="Player" parent="." unique_id=824865768 instance=ExtResource("1_o5qli")]
-position = Vector2(80, 400)
-
-[node name="PressurePlate" parent="." unique_id=229689826 instance=ExtResource("2_sugp2")]
-position = Vector2(300, 435)
-
-[node name="Door" parent="." unique_id=389433874 instance=ExtResource("3_jyhfs")]
-position = Vector2(590, 360)
-
-[node name="GhostContainer" type="Node2D" parent="." unique_id=1331270279]
-
-[node name="Recorder" type="Node" parent="." unique_id=1520913664]
-script = ExtResource("5_tbgi4")
+[node name="LevelContainer" type="Node2D" parent="." unique_id=1406429390]
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=1188671337]
 
+[node name="LevelLabel" type="Label" parent="HUD" unique_id=531972098]
+offset_left = 20.0
+offset_top = 16.0
+offset_right = 60.0
+offset_bottom = 39.0
+theme_override_font_sizes/font_size = 18
+text = "LEVEL"
+
 [node name="StatusLabel" type="Label" parent="HUD" unique_id=2108641747]
 offset_left = 20.0
-offset_top = 20.0
+offset_top = 44.0
 offset_right = 920.0
-offset_bottom = 60.0
+offset_bottom = 84.0
 theme_override_font_sizes/font_size = 18
-text = "READY"
+text = "STATUS"
+
+[node name="HintLabel" type="Label" parent="HUD" unique_id=1844191085]
+offset_left = 20.0
+offset_top = 505.0
+offset_right = 60.0
+offset_bottom = 528.0
+theme_override_font_sizes/font_size = 18
+text = "HINT"
