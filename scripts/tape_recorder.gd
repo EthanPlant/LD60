@@ -2,7 +2,7 @@ class_name TapeRecorder
 extends Node
 
 signal reset_requested
-signal ghost_removed
+signal ghost_removed(actor: Node2D)
 
 enum State {
     READY,
@@ -24,12 +24,9 @@ var state: State = State.READY
 var tape: Array[Transform2D] = []
 var ghost: GhostReplay = null
 
-var spawn_transform: Transform2D
 var rewind_remaining: float = 0.0
 
 func _ready() -> void:
-    spawn_transform = player.global_transform
-
     process_physics_priority = 10 # Sample the player AFTER its physics movement
 
 func _physics_process(delta: float) -> void:
@@ -58,7 +55,7 @@ func handle_record() -> void:
             pass
 
 func start_recording() -> void:
-    ghost_removed.emit()
+    remove_ghost()
 
     tape.clear()
     state = State.RECORDING
@@ -75,7 +72,7 @@ func start_rewind() -> void:
     if tape.is_empty():
         tape.append(player.global_transform)
 
-    ghost_removed.emit()
+    remove_ghost()
 
     state = State.REWINDING
     rewind_remaining = REWIND_SECONDS
@@ -94,19 +91,25 @@ func complete_rewind() -> void:
     state = State.PLAYING
     player.set_movement_enabled(true)
 
-    ghost = null
-
 func erase_tape() -> void:
     if state == State.REWINDING:
         return
 
-    ghost_removed.emit()
+    remove_ghost()
     tape.clear()
 
     reset_requested.emit()
 
     state = State.READY
     player.set_movement_enabled(true)
+
+func remove_ghost() -> void:
+    if is_instance_valid(ghost):
+
+        ghost_removed.emit(ghost)
+        ghost.queue_free()
+
+    ghost = null
 
 func get_status_text() -> String:
     match state:
@@ -126,4 +129,4 @@ func get_status_text() -> String:
     return ""
 
 func _on_ghost_playback_finished() -> void:
-    ghost_removed.emit()
+    remove_ghost()
