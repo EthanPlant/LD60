@@ -12,6 +12,8 @@ size = Vector2(960, 100)
 
 [node name="Level" type="Node2D" unique_id=1507109919]
 script = ExtResource("1_50wog")
+level_name = "01 - Double Exposure"
+level_hint = "Record yourself holding the plate, then follow your ghost."
 
 [node name="Floor" type="StaticBody2D" parent="." unique_id=723629486]
 position = Vector2(480, 490)
