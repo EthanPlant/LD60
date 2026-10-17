@@ -13,6 +13,7 @@ const LEVEL_SCENES = [
 @onready var hint_label: Label = $HUD/HintLabel
 @onready var message_label: Label = $HUD/MessageLabel
 @onready var vhs: VHSOverlay = $FX
+@onready var sfx: SoundEffects = $SFX
 
 var current_level: LevelController = null
 var current_level_index = 0
@@ -102,6 +103,9 @@ func finish_game() -> void:
 
 	current_level = null
 
+	vhs.reset_effect()
+	sfx.play_event(&"complete")
+
 	level_label.text = "SIGNAL RESTORED"
 	status_label.text = "You escaped the facility."
 	hint_label.text = "Press Enter to play again."
@@ -112,9 +116,15 @@ func _on_level_completed() -> void:
 func _show_feedback(message: String) -> void:
 	if message.begins_with("TRACKING LOST"):
 		vhs.trigger_rewind()
+		sfx.play_event(&"hit")
+	elif message.begins_with("SYNC"):
+		sfx.play_event(&"sync")
+		
 	message_label.text = message
 	feedback_remaining = 0.9
 
 func _on_tape_event(event_name: StringName) -> void:
+	sfx.play_event(event_name)
+
 	if event_name == &"rewind":
 		vhs.trigger_rewind()

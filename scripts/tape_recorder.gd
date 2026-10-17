@@ -57,6 +57,9 @@ func handle_record() -> void:
         State.PLAYING:
             if can_play_again():
                 start_rewind()
+            else:
+                tape_event.emit(&"broken")
+
         State.REWINDING:
             pass
 
@@ -66,6 +69,7 @@ func start_recording() -> void:
     tape.clear()
     playback_count = 0
     state = State.RECORDING
+    tape_event.emit(&"record")
 
 func capture_frame() -> void:
     tape.append(player.global_transform)
@@ -95,9 +99,10 @@ func complete_rewind() -> void:
     var usable_frames: Array[Transform2D] = get_usable_frames()
 
     if usable_frames.is_empty():
-        # A vary short, heavily worn recording
+        # A very short, heavily worn recording
         state = State.PLAYING
         player.set_movement_enabled(true)
+        tape_event.emit(&"broken")
         return
 
     ghost = GHOST_SCENE.instantiate() as GhostReplay
@@ -108,6 +113,8 @@ func complete_rewind() -> void:
 
     state = State.PLAYING
     player.set_movement_enabled(true)
+
+    tape_event.emit(&"playback")
 
 func erase_tape() -> void:
     if state == State.REWINDING:
@@ -122,12 +129,18 @@ func erase_tape() -> void:
     state = State.READY
     player.set_movement_enabled(true)
 
+    tape_event.emit(&"erase")
+
 func restart_attempt() -> void:
     if state == State.REWINDING:
         return
 
     if state == State.PLAYING and not tape.is_empty():
-        start_rewind()
+        if can_play_again():
+            start_rewind()
+        else:
+            erase_tape()
+            tape_event.emit(&"broken")
     else:
         erase_tape()
 
