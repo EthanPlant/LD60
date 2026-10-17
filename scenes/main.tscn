@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://b8y02c78mib4c" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://buqhc457phf5q" path="res://scenes/pressure_plate.tscn" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://c4olje064x3jm" path="res://scenes/door.tscn" id="3_jyhfs"]
+[ext_resource type="Script" uid="uid://b73pxe11uesnk" path="res://scripts/tape_recorder.gd" id="5_tbgi4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
 size = Vector2(960, 100)
@@ -29,3 +30,8 @@ position = Vector2(300, 435)
 
 [node name="Door" parent="." unique_id=389433874 instance=ExtResource("3_jyhfs")]
 position = Vector2(590, 360)
+
+[node name="GhostContainer" type="Node2D" parent="." unique_id=1331270279]
+
+[node name="Recorder" type="Node" parent="." unique_id=1520913664]
+script = ExtResource("5_tbgi4")
