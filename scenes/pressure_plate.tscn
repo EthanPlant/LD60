@@ -1,3 +1,18 @@
 [gd_scene format=3 uid="uid://buqhc457phf5q"]
 
-[node name="PressurePlate" type="Node2D" unique_id=1259705732]
+[ext_resource type="Script" uid="uid://efklfnqkxnaf" path="res://scripts/pressure_plate.gd" id="1_ct5vs"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
+size = Vector2(60, 10)
+
+[node name="PressurePlate" type="Area2D" unique_id=229689826]
+collision_layer = 0
+collision_mask = 6
+script = ExtResource("1_ct5vs")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=998108224]
+shape = SubResource("RectangleShape2D_epxd5")
+
+[node name="Visual" type="Polygon2D" parent="." unique_id=1946183402]
+color = Color(1, 0.7490196, 0, 1)
+polygon = PackedVector2Array(-30, -5, 30, -5, 30, 5, -30, 5)

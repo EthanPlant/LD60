@@ -1,3 +1,15 @@
 [gd_scene format=3 uid="uid://c4olje064x3jm"]
 
-[node name="Door" type="Node2D" unique_id=977513702]
+[ext_resource type="Script" uid="uid://doga6cw8upt83" path="res://scripts/door.gd" id="1_hpvv5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
+size = Vector2(28, 160)
+
+[node name="Door" type="StaticBody2D" unique_id=389433874]
+script = ExtResource("1_hpvv5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=919929396]
+shape = SubResource("RectangleShape2D_epxd5")
+
+[node name="Visual" type="Polygon2D" parent="." unique_id=207547668]
+polygon = PackedVector2Array(-14, -80, 14, -80, 14, 80, -14, 80)
