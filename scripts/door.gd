@@ -1,16 +1,24 @@
 class_name Door
 extends StaticBody2D
 
+enum Mode {
+    HOLD,
+    TIMED
+}
+
 const CLOSED_COLOUR := Color("#C35460")
 const OPEN_COLOUR := Color("#85E08A", 0.3)
 
+@export var mode: Mode = Mode.HOLD
 @export var activation_plate: PressurePlate
+@export_range(0.25, 10.0, 0.05, "suffix:s") var open_duration: float = 1.25
 
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var visual: Polygon2D = $Visual
 
 
 var is_open: bool = false
+var time_remaining = 0.0
 
 func _ready() -> void:
     add_to_group("puzzle_doors")
@@ -20,7 +28,18 @@ func _ready() -> void:
     else:
         push_warning("Door has no activation plate assigned")
 
+    set_physics_process(mode == Mode.TIMED)
     update_visual()
+
+func _physics_process(delta: float) -> void:
+    if mode != Mode.TIMED or not is_open:
+        return
+
+    time_remaining -= delta
+
+    if time_remaining <= 0.0:
+        time_remaining = 0.0
+        set_open(false)
 
 func set_open(should_open: bool) -> void:
     if is_open == should_open:
@@ -33,10 +52,18 @@ func set_open(should_open: bool) -> void:
     update_visual()
 
 func reset_state() -> void:
+    time_remaining = 0.0
     set_open(false)
 
 func update_visual() -> void:
     visual.color = OPEN_COLOUR if is_open else CLOSED_COLOUR
 
 func _on_plate_changed(pressed: bool) -> void:
-    set_open(pressed)
+    match mode:
+        Mode.HOLD:
+            set_open(pressed)
+        
+        Mode.TIMED:
+            if pressed:
+                time_remaining = open_duration
+                set_open(true)
