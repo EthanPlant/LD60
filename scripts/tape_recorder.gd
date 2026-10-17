@@ -14,8 +14,12 @@ enum State {
 
 const MAX_SECONDS: float = 8.0
 const REWIND_SECONDS: float = 0.3
+const WEAR_PER_REPLAY: float = 0.75
+const MAX_PLAYBACKS: int = 3
 
 const GHOST_SCENE: PackedScene = preload("res://scenes/ghost.tscn")
+
+@export var tape_wear_enabled: bool = true
 
 @onready var player: PlayerController = $"../Player"
 @onready var ghost_container: Node2D = $"../GhostContainer"
@@ -25,6 +29,7 @@ var state: State = State.READY
 var tape: Array[Transform2D] = []
 var ghost: GhostReplay = null
 
+var playback_count: int = 0
 var rewind_remaining: float = 0.0
 
 func _ready() -> void:
@@ -50,8 +55,8 @@ func handle_record() -> void:
             start_rewind()
 
         State.PLAYING:
-            start_rewind()
-
+            if can_play_again():
+                start_rewind()
         State.REWINDING:
             pass
 
@@ -59,6 +64,7 @@ func start_recording() -> void:
     remove_ghost()
 
     tape.clear()
+    playback_count = 0
     state = State.RECORDING
 
 func capture_frame() -> void:
@@ -84,6 +90,16 @@ func start_rewind() -> void:
 func complete_rewind() -> void:
     reset_requested.emit()
 
+    playback_count += 1
+
+    var usable_frames: Array[Transform2D] = get_usable_frames()
+
+    if usable_frames.is_empty():
+        # A vary short, heavily worn recording
+        state = State.PLAYING
+        player.set_movement_enabled(true)
+        return
+
     ghost = GHOST_SCENE.instantiate() as GhostReplay
     ghost_container.add_child(ghost)
 
@@ -99,6 +115,7 @@ func erase_tape() -> void:
 
     remove_ghost()
     tape.clear()
+    playback_count = 0
 
     reset_requested.emit()
 
@@ -121,6 +138,33 @@ func remove_ghost() -> void:
         ghost.queue_free()
 
     ghost = null
+
+func get_usable_frames() -> Array[Transform2D]:
+    var result: Array[Transform2D] = []
+
+    var frames_lost: int = 0
+
+    if tape_wear_enabled:
+        frames_lost = roundi(float(playback_count - 1) * WEAR_PER_REPLAY * Engine.physics_ticks_per_second)
+
+    var frame_limit: int = maxi(0, tape.size() - frames_lost)
+
+    for i in range(frame_limit):
+        result.append(tape[i])
+    
+    return result
+
+func can_play_again():
+    if not tape_wear_enabled:
+        return true
+
+    return playback_count < MAX_PLAYBACKS
+
+func get_wear_ratio() -> float:
+    if not tape_wear_enabled:
+        return 0.0
+
+    return clampf(float(maxi(0, playback_count - 1)) / 2.0, 0.0, 1.0)
 
 func get_status_text() -> String:
     match state:
