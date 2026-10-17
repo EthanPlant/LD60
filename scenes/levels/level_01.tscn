@@ -26,8 +26,9 @@ position = Vector2(80, 400)
 [node name="PressurePlate" parent="." unique_id=229689826 instance=ExtResource("3_1ey3t")]
 position = Vector2(300, 435)
 
-[node name="Door" parent="." unique_id=389433874 instance=ExtResource("4_t0hvh")]
+[node name="Door" parent="." unique_id=389433874 node_paths=PackedStringArray("activation_plate") instance=ExtResource("4_t0hvh")]
 position = Vector2(590, 360)
+activation_plate = NodePath("../PressurePlate")
 
 [node name="GhostContainer" type="Node2D" parent="." unique_id=1331270279]
 

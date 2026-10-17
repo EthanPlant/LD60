@@ -4,12 +4,22 @@ extends StaticBody2D
 const CLOSED_COLOUR := Color("#C35460")
 const OPEN_COLOUR := Color("#85E08A", 0.3)
 
+@export var activation_plate: PressurePlate
+
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var visual: Polygon2D = $Visual
+
 
 var is_open: bool = false
 
 func _ready() -> void:
+    add_to_group("puzzle_doors")
+
+    if activation_plate != null:
+        activation_plate.pressed_changed.connect(_on_plate_changed)
+    else:
+        push_warning("Door has no activation plate assigned")
+
     update_visual()
 
 func set_open(should_open: bool) -> void:
@@ -24,3 +34,6 @@ func set_open(should_open: bool) -> void:
 
 func update_visual() -> void:
     visual.color = OPEN_COLOUR if is_open else CLOSED_COLOUR
+
+func _on_plate_changed(pressed: bool) -> void:
+    set_open(pressed)

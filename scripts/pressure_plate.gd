@@ -12,6 +12,8 @@ var is_pressed: bool = false
 var activators: Array[Node2D] = []
 
 func _ready() -> void:
+	add_to_group("puzzle_plates")
+	
 	body_entered.connect(_on_activator_entered)
 	body_exited.connect(_on_activator_exited)
 
