@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://c0k7vr3guvbrv"]
+
+[ext_resource type="Script" uid="uid://cox7yeib171iv" path="res://scripts/exit.gd" id="1_l0aq0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
+size = Vector2(56, 50)
+
+[node name="Exit" type="Area2D" unique_id=732288300]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_l0aq0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1434916372]
+shape = SubResource("RectangleShape2D_epxd5")
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=93044278]
+color = Color(0.21568628, 0.48235294, 0.40784314, 1)
+polygon = PackedVector2Array(-28, -25, 28, -25, 28, 25, -28, 25)
