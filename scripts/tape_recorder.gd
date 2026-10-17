@@ -1,6 +1,9 @@
 class_name TapeRecorder
 extends Node
 
+signal reset_requested
+signal ghost_removed
+
 enum State {
     READY,
     RECORDING,
@@ -14,8 +17,6 @@ const REWIND_SECONDS: float = 0.3
 const GHOST_SCENE: PackedScene = preload("res://scenes/ghost.tscn")
 
 @onready var player: PlayerController = $"../Player"
-@onready var pressure_plate: PressurePlate = $"../PressurePlate"
-@onready var door: Door = $"../Door"
 @onready var ghost_container: Node2D = $"../GhostContainer"
 
 var state: State = State.READY
@@ -57,7 +58,7 @@ func handle_record() -> void:
             pass
 
 func start_recording() -> void:
-    remove_ghost()
+    ghost_removed.emit()
 
     tape.clear()
     state = State.RECORDING
@@ -74,7 +75,7 @@ func start_rewind() -> void:
     if tape.is_empty():
         tape.append(player.global_transform)
 
-    remove_ghost()
+    ghost_removed.emit()
 
     state = State.REWINDING
     rewind_remaining = REWIND_SECONDS
@@ -82,7 +83,7 @@ func start_rewind() -> void:
     player.set_movement_enabled(false)
 
 func complete_rewind() -> void:
-    reset_room()
+    reset_requested.emit()
 
     ghost = GHOST_SCENE.instantiate() as GhostReplay
     ghost_container.add_child(ghost)
@@ -93,27 +94,16 @@ func complete_rewind() -> void:
     state = State.PLAYING
     player.set_movement_enabled(true)
 
-func reset_room() -> void:
-    player.reset_to(spawn_transform)
-
-    pressure_plate.reset_state()
-    door.set_open(false)
-
-func remove_ghost() -> void:
-    if is_instance_valid(ghost):
-        pressure_plate.forget_activator(ghost)
-        ghost.queue_free()
-
     ghost = null
 
 func erase_tape() -> void:
     if state == State.REWINDING:
         return
 
-    remove_ghost()
+    ghost_removed.emit()
     tape.clear()
 
-    reset_room()
+    reset_requested.emit()
 
     state = State.READY
     player.set_movement_enabled(true)
@@ -136,4 +126,4 @@ func get_status_text() -> String:
     return ""
 
 func _on_ghost_playback_finished() -> void:
-    remove_ghost()
+    ghost_removed.emit()
