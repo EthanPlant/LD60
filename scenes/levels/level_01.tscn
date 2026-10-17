@@ -1,14 +1,17 @@
 [gd_scene format=3 uid="uid://nlcmpn7ubb83"]
 
+[ext_resource type="Script" uid="uid://7u2dts13niuo" path="res://scripts/level.gd" id="1_50wog"]
 [ext_resource type="PackedScene" uid="uid://b8y02c78mib4c" path="res://scenes/player.tscn" id="2_50wog"]
 [ext_resource type="PackedScene" uid="uid://buqhc457phf5q" path="res://scenes/pressure_plate.tscn" id="3_1ey3t"]
 [ext_resource type="PackedScene" uid="uid://c4olje064x3jm" path="res://scenes/door.tscn" id="4_t0hvh"]
+[ext_resource type="PackedScene" uid="uid://c0k7vr3guvbrv" path="res://scenes/exit.tscn" id="5_1ey3t"]
 [ext_resource type="Script" uid="uid://b73pxe11uesnk" path="res://scripts/tape_recorder.gd" id="5_kfebt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
 size = Vector2(960, 100)
 
 [node name="Level" type="Node2D" unique_id=1507109919]
+script = ExtResource("1_50wog")
 
 [node name="Floor" type="StaticBody2D" parent="." unique_id=723629486]
 position = Vector2(480, 490)
@@ -29,6 +32,9 @@ position = Vector2(300, 435)
 [node name="Door" parent="." unique_id=389433874 node_paths=PackedStringArray("activation_plate") instance=ExtResource("4_t0hvh")]
 position = Vector2(590, 360)
 activation_plate = NodePath("../PressurePlate")
+
+[node name="Exit" parent="." unique_id=732288300 instance=ExtResource("5_1ey3t")]
+position = Vector2(830, 415)
 
 [node name="GhostContainer" type="Node2D" parent="." unique_id=1331270279]
 

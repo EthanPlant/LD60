@@ -32,6 +32,9 @@ func set_open(should_open: bool) -> void:
 
     update_visual()
 
+func reset_state() -> void:
+    set_open(false)
+
 func update_visual() -> void:
     visual.color = OPEN_COLOUR if is_open else CLOSED_COLOUR
 
