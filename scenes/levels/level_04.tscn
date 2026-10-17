@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://668u43vq16p1"]
+
+[ext_resource type="Script" uid="uid://7u2dts13niuo" path="res://scripts/level.gd" id="1_ypi4k"]
+[ext_resource type="PackedScene" uid="uid://b8y02c78mib4c" path="res://scenes/player.tscn" id="2_cw75u"]
+[ext_resource type="PackedScene" uid="uid://buqhc457phf5q" path="res://scenes/pressure_plate.tscn" id="3_gkpor"]
+[ext_resource type="PackedScene" uid="uid://c4olje064x3jm" path="res://scenes/door.tscn" id="4_a0uur"]
+[ext_resource type="PackedScene" uid="uid://dc25ph04e7nq5" path="res://scenes/electrical_barrier.tscn" id="5_cw75u"]
+[ext_resource type="PackedScene" uid="uid://c0k7vr3guvbrv" path="res://scenes/exit.tscn" id="5_yy4na"]
+[ext_resource type="Script" uid="uid://b73pxe11uesnk" path="res://scripts/tape_recorder.gd" id="6_07dqf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
+size = Vector2(960, 100)
+
+[node name="Level" type="Node2D" unique_id=1507109919]
+script = ExtResource("1_ypi4k")
+level_name = "04 - Crossfade"
+level_hint = "One recording. Two actions. Stay ahead of the tape."
+
+[node name="Floor" type="StaticBody2D" parent="." unique_id=723629486]
+position = Vector2(480, 490)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=1625195843]
+shape = SubResource("RectangleShape2D_epxd5")
+
+[node name="Visual" type="Polygon2D" parent="Floor" unique_id=233176641]
+color = Color(0.20784314, 0.2784314, 0.36862746, 1)
+polygon = PackedVector2Array(-480, -50, 480, -50, 480, 50, -480, 50)
+
+[node name="Player" parent="." unique_id=824865768 instance=ExtResource("2_cw75u")]
+position = Vector2(80, 400)
+
+[node name="PressurePlateA" parent="." unique_id=229689826 instance=ExtResource("3_gkpor")]
+position = Vector2(220, 435)
+
+[node name="PressurePlateB" parent="." unique_id=2069090187 instance=ExtResource("3_gkpor")]
+position = Vector2(350, 435)
+
+[node name="Door" parent="." unique_id=389433874 node_paths=PackedStringArray("activation_plate") instance=ExtResource("4_a0uur")]
+position = Vector2(750, 360)
+mode = 1
+activation_plate = NodePath("../PressurePlateB")
+open_duration = 2.0
+
+[node name="ElectricalBarrier" parent="." unique_id=295602388 node_paths=PackedStringArray("disabling_plate") instance=ExtResource("5_cw75u")]
+position = Vector2(510, 330)
+disabling_plate = NodePath("../PressurePlateA")
+
+[node name="Exit" parent="." unique_id=732288300 instance=ExtResource("5_yy4na")]
+position = Vector2(870, 415)
+
+[node name="GhostContainer" type="Node2D" parent="." unique_id=1331270279]
+
+[node name="Recorder" type="Node" parent="." unique_id=1520913664]
+script = ExtResource("6_07dqf")

@@ -1,11 +1,14 @@
 [gd_scene format=3 uid="uid://dc25ph04e7nq5"]
 
+[ext_resource type="Script" uid="uid://dlymoydm6embc" path="res://scripts/electrical_barrier.gd" id="1_i5pxv"]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
 size = Vector2(16, 220)
 
 [node name="ElectricalBarrier" type="Area2D" unique_id=295602388]
 collision_layer = 0
 collision_mask = 2
+script = ExtResource("1_i5pxv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2044043567]
 shape = SubResource("RectangleShape2D_epxd5")
