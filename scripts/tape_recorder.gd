@@ -103,6 +103,15 @@ func erase_tape() -> void:
     state = State.READY
     player.set_movement_enabled(true)
 
+func restart_attempt() -> void:
+    if state == State.REWINDING:
+        return
+
+    if state == State.PLAYING and not tape.is_empty():
+        start_rewind()
+    else:
+        erase_tape()
+
 func remove_ghost() -> void:
     if is_instance_valid(ghost):
 

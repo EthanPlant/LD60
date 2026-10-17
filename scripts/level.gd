@@ -12,6 +12,7 @@ signal completed
 
 var spawn_transform: Transform2D
 var finished: bool = false
+var hit_pending = false
 
 func _ready() -> void:
     spawn_transform = player.global_transform
@@ -20,6 +21,12 @@ func _ready() -> void:
     recorder.ghost_removed.connect(forget_activator)
 
     exit.reached.connect(_on_exit_reached)
+
+    for node in get_tree().get_nodes_in_group("puzzle_barriers"):
+        var barrier := node as ElectricalBarrier
+
+        if barrier != null and is_ancestor_of(barrier):
+            barrier.player_hit.connect(_on_barrier_hit)
 
 func reset_room() -> void:
     player.reset_to(spawn_transform)
@@ -34,6 +41,16 @@ func reset_room() -> void:
             var door: Door = node as Door
             door.reset_state()
 
+    for node in get_tree().get_nodes_in_group("puzzle_barriers"):
+        if is_ancestor_of(node):
+            var barrier: ElectricalBarrier = node as ElectricalBarrier
+            barrier.reset_state()
+
+    for node in get_tree().get_nodes_in_group("puzzle_sync_gates"):
+        if is_ancestor_of(node):
+            var gate: SyncGate = node as SyncGate
+            gate.reset_state()
+
     exit.reset_state()
 
 func forget_activator(actor: Node2D) -> void:
@@ -41,6 +58,20 @@ func forget_activator(actor: Node2D) -> void:
         if is_ancestor_of(node):
             var plate: PressurePlate = node as PressurePlate
             plate.forget_activator(actor)
+
+func restart_after_hit() -> void:
+    if not finished:
+        recorder.restart_attempt()
+
+        hit_pending = false
+
+func _on_barrier_hit() -> void:
+    if finished or hit_pending:
+        return
+
+    hit_pending = true
+
+    call_deferred("restart_after_hit")
 
 func _on_exit_reached() -> void:
     if finished:
