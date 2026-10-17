@@ -2,6 +2,7 @@ class_name LevelController
 extends Node2D
 
 signal completed
+signal feedback_requested(message: String)
 
 @export var level_name: String = "Untitled Level"
 @export_multiline var level_hint: String = ""
@@ -27,6 +28,12 @@ func _ready() -> void:
 
         if barrier != null and is_ancestor_of(barrier):
             barrier.player_hit.connect(_on_barrier_hit)
+
+    for node in get_tree().get_nodes_in_group("puzzle_sync_gates"):
+        var gate := node as SyncGate
+
+        if gate != null and is_ancestor_of(gate):
+            gate.synchronized.connect(_on_synchronized)
 
 func reset_room() -> void:
     player.reset_to(spawn_transform)
@@ -65,11 +72,16 @@ func restart_after_hit() -> void:
 
         hit_pending = false
 
+func _on_synchronized() -> void:
+    feedback_requested.emit("SYNC ESTABLISHED -- DOOR UNLOCKED")
+
 func _on_barrier_hit() -> void:
     if finished or hit_pending:
         return
 
     hit_pending = true
+
+    feedback_requested.emit("TRACKING LOST -- REWINDING")
 
     call_deferred("restart_after_hit")
 

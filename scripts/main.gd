@@ -1,25 +1,34 @@
 extends Node2D
 
 const LEVEL_SCENES = [
-	preload("res://scenes/levels/level_04.tscn"),
 	preload("res://scenes/levels/level_01.tscn"),
 	preload("res://scenes/levels/level_02.tscn"),
 	preload("res://scenes/levels/level_03.tscn"),
+	preload("res://scenes/levels/level_04.tscn"),
 ]
 
 @onready var level_container: Node2D = $LevelContainer
 @onready var level_label: Label = $HUD/LevelLabel
 @onready var status_label: Label = $HUD/StatusLabel
 @onready var hint_label: Label = $HUD/HintLabel
+@onready var message_label: Label = $HUD/MessageLabel
 
 var current_level: LevelController = null
 var current_level_index = 0
 var game_finished: bool = false
+var feedback_remaining: float = 0.0
 
 func _ready() -> void:
 	load_level(0)
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	if feedback_remaining > 0.0:
+		feedback_remaining -= delta
+
+		if feedback_remaining <= 0.0:
+			feedback_remaining = 0.0
+			message_label.text = ""
+
 	if game_finished:
 		return
 
@@ -59,6 +68,10 @@ func load_level(index: int) -> void:
 	level_container.add_child(current_level)
 	current_level.completed.connect(_on_level_completed)
 
+	current_level.feedback_requested.connect(_show_feedback)
+	message_label.text = ""
+	feedback_remaining = 0.0
+
 	level_label.text = current_level.level_name
 	hint_label.text = current_level.level_hint
 
@@ -85,3 +98,7 @@ func finish_game() -> void:
 
 func _on_level_completed() -> void:
 	call_deferred("advance_level")
+
+func _show_feedback(message: String) -> void:
+	message_label.text = message
+	feedback_remaining = 0.9
