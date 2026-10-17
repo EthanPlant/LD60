@@ -48,3 +48,11 @@ func update_pressed_state() -> void:
 
 func update_visual() -> void:
 	visual.color = ACTIVE_COLOUR if is_pressed else INACTIVE_COLOUR
+
+func forget_activator(actor: Node2D) -> void:
+	activators.erase(actor)
+	update_pressed_state()
+
+func reset_state() -> void:
+	activators.clear()
+	update_pressed_state() 
