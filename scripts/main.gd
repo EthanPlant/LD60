@@ -79,6 +79,8 @@ func load_level(index: int) -> void:
 
 	level_label.text = current_level.level_name
 	hint_label.text = current_level.level_hint
+
+	current_level.recorder.tape_event.connect(_on_tape_event)
 	
 	vhs.reset_effect()
 
@@ -107,5 +109,11 @@ func _on_level_completed() -> void:
 	call_deferred("advance_level")
 
 func _show_feedback(message: String) -> void:
+	if message.begins_with("TRACKING LOST"):
+		vhs.trigger_rewind()
 	message_label.text = message
 	feedback_remaining = 0.9
+
+func _on_tape_event(event_name: StringName) -> void:
+	if event_name == &"rewind":
+		vhs.trigger_rewind()

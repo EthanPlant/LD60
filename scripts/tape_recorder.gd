@@ -3,6 +3,7 @@ extends Node
 
 signal reset_requested
 signal ghost_removed(actor: Node2D)
+signal tape_event(event_name: StringName)
 
 enum State {
     READY,
@@ -78,6 +79,7 @@ func start_rewind() -> void:
     rewind_remaining = REWIND_SECONDS
 
     player.set_movement_enabled(false)
+    tape_event.emit(&"rewind")
 
 func complete_rewind() -> void:
     reset_requested.emit()
