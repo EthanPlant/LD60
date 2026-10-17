@@ -37,6 +37,10 @@ func _process(delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if game_finished:
+		if event is InputEventKey:
+			if event.pressed and not event.echo and event.keycode == KEY_ENTER:
+				game_finished = false
+				load_level(0)
 		return
 
 	if not is_instance_valid(current_level):
@@ -94,7 +98,7 @@ func finish_game() -> void:
 
 	level_label.text = "SIGNAL RESTORED"
 	status_label.text = "You escaped the facility."
-	hint_label.text = "End of transmission."
+	hint_label.text = "Press Enter to play again."
 
 func _on_level_completed() -> void:
 	call_deferred("advance_level")
