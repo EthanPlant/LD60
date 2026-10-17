@@ -25,8 +25,6 @@ func _ready() -> void:
 
     if activation_plate != null:
         activation_plate.pressed_changed.connect(_on_plate_changed)
-    else:
-        push_warning("Door has no activation plate assigned")
 
     set_physics_process(mode == Mode.TIMED)
     update_visual()
@@ -51,6 +49,18 @@ func set_open(should_open: bool) -> void:
 
     update_visual()
 
+func pulse_open(duration_override: float = -1.0) -> void:
+    if mode != Mode.TIMED:
+        push_warning("Cannot pulse a HOLD door.")
+        return
+
+    if duration_override > 0.0:
+        time_remaining = duration_override
+    else:
+        time_remaining = open_duration
+    
+    set_open(true)
+
 func reset_state() -> void:
     time_remaining = 0.0
     set_open(false)
@@ -65,5 +75,4 @@ func _on_plate_changed(pressed: bool) -> void:
         
         Mode.TIMED:
             if pressed:
-                time_remaining = open_duration
-                set_open(true)
+                pulse_open()

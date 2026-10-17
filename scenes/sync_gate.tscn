@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b7nun7lvs6al5"]
+
+[ext_resource type="Script" uid="uid://b8clsdir8ypag" path="res://scripts/sync_gate.gd" id="1_up4yy"]
+
+[node name="SyncGate" type="Node" unique_id=298065327]
+script = ExtResource("1_up4yy")
