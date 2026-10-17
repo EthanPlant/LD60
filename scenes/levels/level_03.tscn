@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://cy3bdy0soqj6h"]
+
+[ext_resource type="Script" uid="uid://7u2dts13niuo" path="res://scripts/level.gd" id="1_r8ojw"]
+[ext_resource type="PackedScene" uid="uid://b8y02c78mib4c" path="res://scenes/player.tscn" id="2_1jnh5"]
+[ext_resource type="PackedScene" uid="uid://buqhc457phf5q" path="res://scenes/pressure_plate.tscn" id="3_jgt0v"]
+[ext_resource type="PackedScene" uid="uid://c4olje064x3jm" path="res://scenes/door.tscn" id="4_hvqp8"]
+[ext_resource type="PackedScene" uid="uid://c0k7vr3guvbrv" path="res://scenes/exit.tscn" id="5_8w8tq"]
+[ext_resource type="PackedScene" uid="uid://b7nun7lvs6al5" path="res://scenes/sync_gate.tscn" id="6_1jnh5"]
+[ext_resource type="Script" uid="uid://b73pxe11uesnk" path="res://scripts/tape_recorder.gd" id="6_foqc1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
+size = Vector2(960, 100)
+
+[node name="Level" type="Node2D" unique_id=1507109919]
+script = ExtResource("1_r8ojw")
+level_name = "03 - Two of Us"
+level_hint = "Two switches. Two versions of you."
+
+[node name="Floor" type="StaticBody2D" parent="." unique_id=723629486]
+position = Vector2(480, 490)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=1625195843]
+shape = SubResource("RectangleShape2D_epxd5")
+
+[node name="Visual" type="Polygon2D" parent="Floor" unique_id=233176641]
+color = Color(0.20784314, 0.2784314, 0.36862746, 1)
+polygon = PackedVector2Array(-480, -50, 480, -50, 480, 50, -480, 50)
+
+[node name="Player" parent="." unique_id=824865768 instance=ExtResource("2_1jnh5")]
+position = Vector2(80, 400)
+
+[node name="PressurePlateA" parent="." unique_id=229689826 instance=ExtResource("3_jgt0v")]
+position = Vector2(230, 435)
+
+[node name="PressurePlateB" parent="." unique_id=161781291 instance=ExtResource("3_jgt0v")]
+position = Vector2(500, 435)
+
+[node name="Door" parent="." unique_id=389433874 instance=ExtResource("4_hvqp8")]
+position = Vector2(720, 360)
+mode = 1
+
+[node name="Exit" parent="." unique_id=732288300 instance=ExtResource("5_8w8tq")]
+position = Vector2(875, 415)
+
+[node name="GhostContainer" type="Node2D" parent="." unique_id=1331270279]
+
+[node name="SyncGate" parent="." unique_id=298065327 node_paths=PackedStringArray("plate_a", "plate_b", "target_door") instance=ExtResource("6_1jnh5")]
+plate_a = NodePath("../PressurePlateA")
+plate_b = NodePath("../PressurePlateB")
+target_door = NodePath("../Door")
+
+[node name="Recorder" type="Node" parent="." unique_id=1520913664]
+script = ExtResource("6_foqc1")
