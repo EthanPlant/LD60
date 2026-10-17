@@ -12,6 +12,7 @@ const LEVEL_SCENES = [
 @onready var status_label: Label = $HUD/StatusLabel
 @onready var hint_label: Label = $HUD/HintLabel
 @onready var message_label: Label = $HUD/MessageLabel
+@onready var vhs: VHSOverlay = $FX
 
 var current_level: LevelController = null
 var current_level_index = 0
@@ -78,6 +79,8 @@ func load_level(index: int) -> void:
 
 	level_label.text = current_level.level_name
 	hint_label.text = current_level.level_hint
+	
+	vhs.reset_effect()
 
 func advance_level() -> void:
 	var next_index: int = current_level_index + 1

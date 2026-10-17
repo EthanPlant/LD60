@@ -1,11 +1,35 @@
 [gd_scene format=3 uid="uid://dxgfnodt5g7s6"]
 
 [ext_resource type="Script" uid="uid://c014d6i0bxm6s" path="res://scripts/main.gd" id="1_jyhfs"]
+[ext_resource type="Shader" uid="uid://c30vwr8aguna5" path="res://shaders/vhs.gdshader" id="2_0wfyh"]
+[ext_resource type="Script" uid="uid://d3wuawspjs7l0" path="res://scripts/vhs_overlay.gd" id="2_sugp2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0wfyh"]
+shader = ExtResource("2_0wfyh")
+shader_parameter/intensity = 0.50000002375
+shader_parameter/wear = 0.0
+shader_parameter/rewind_amount = 0.0
+shader_parameter/chroma_strength = 1.0
+shader_parameter/tracking_strength = 1.0
+shader_parameter/ghost_strength = 0.15
 
 [node name="Main" type="Node2D" unique_id=1507109919]
 script = ExtResource("1_jyhfs")
 
 [node name="LevelContainer" type="Node2D" parent="." unique_id=1406429390]
+
+[node name="FX" type="CanvasLayer" parent="." unique_id=530681120]
+script = ExtResource("2_sugp2")
+
+[node name="VHS" type="ColorRect" parent="FX" unique_id=1890478876]
+material = SubResource("ShaderMaterial_0wfyh")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=1188671337]
 
