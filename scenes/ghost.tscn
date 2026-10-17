@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dtu8nhmlvtxv8"]
+
+[ext_resource type="Script" uid="uid://iamgywltcn23" path="res://scripts/ghost.gd" id="1_t76o2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
+size = Vector2(20, 28)
+
+[node name="Ghost" type="Area2D" unique_id=577721749]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("1_t76o2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1310219589]
+shape = SubResource("RectangleShape2D_epxd5")
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=1608543250]
+color = Color(0.45882353, 0.8352941, 0.9019608, 0.44313726)
+polygon = PackedVector2Array(-10, -14, 10, -14, 10, 14, -10, 14)
