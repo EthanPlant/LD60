@@ -1,3 +1,4 @@
+class_name PlayerController
 extends CharacterBody2D
 
 @export var move_speed: float = 180.0
@@ -6,10 +7,15 @@ extends CharacterBody2D
 @export var jump_velocity: float = -310.0
 @export var gravity: float = 900.0
 
+var movement_enabled: bool = true
+
 func _ready() -> void:
     add_to_group("plate_activator")
 
 func _physics_process(delta: float) -> void:
+    if not movement_enabled:
+        return
+
     apply_gravity(delta)
     handle_jump()
     handle_horizontal_movement(delta)
@@ -36,3 +42,14 @@ func handle_horizontal_movement(delta: float) -> void:
         velocity.x = move_toward(velocity.x, 0.0, friction * delta)
     else:
         velocity.x = move_toward(velocity.x, target_velocity, acceleration * delta)
+
+func set_movement_enabled(enabled: bool) -> void:
+    movement_enabled = enabled
+
+    if not enabled:
+        velocity = Vector2.ZERO
+
+func reset_to(target_transform: Transform2D) -> void:
+    global_transform = target_transform
+    velocity = Vector2.ZERO
+    reset_physics_interpolation()
