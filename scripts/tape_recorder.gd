@@ -118,5 +118,22 @@ func erase_tape() -> void:
     state = State.READY
     player.set_movement_enabled(true)
 
+func get_status_text() -> String:
+    match state:
+        State.READY:
+            return "READY | R: Record | Backspace: Reset"
+
+        State.RECORDING:
+            var seconds: float = (float(tape.size()) / float(Engine.physics_ticks_per_second))
+            return "REC %.1f / %.1f s | R: Stop" % [ seconds, MAX_SECONDS ]
+
+        State.REWINDING:
+            return "REWINDING"
+
+        State.PLAYING:
+            return "PLAYBACK | R: Replay | Backspace: Erase"
+
+    return ""
+
 func _on_ghost_playback_finished() -> void:
     remove_ghost()
