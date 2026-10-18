@@ -1,97 +1,127 @@
 class_name SoundEffects
 extends Node
 
-const SAMPLE_RATE: int = 22050
+@export_range(-24.0, 0.0, 0.5) var effect_volume_db: float = -8.0
+@export var enabled: bool = true
 
-var rng := RandomNumberGenerator.new()
+const MAX_VOICES := 8
+
+const SOUNDS := {
+    &"record": preload("res://sfx/record.wav"),
+    &"rewind": preload("res://sfx/rewind.wav"),
+    &"playback": preload("res://sfx/playback.wav"),
+    &"playback_2": preload("res://sfx/playback_2.wav"),
+    &"playback_3": preload("res://sfx/playback_3.wav"),
+    &"erase": preload("res://sfx/erase.wav"),
+    &"broken": preload("res:///sfx/broken.wav"),
+    &"sync": preload("res:///sfx/sync.wav"),
+    &"hit": preload("res:///sfx/hit.wav"),
+    &"complete": preload("res://sfx/complete.wav"),
+    &"plate_on": preload("res://sfx/plate_on.wav"),
+    &"plate_off": preload("res://sfx/plate_off.wav"),
+    &"door_open": preload("res://sfx/door_open.wav"),
+    &"door_close": preload("res://sfx/door_close.wav"),
+    &"barrier_on": preload("res://sfx/barrier_on.wav"),
+    &"barrier_off": preload("res://sfx/barrier_off.wav"),
+    &"start": preload("res://sfx/start.wav"),
+    &"jump": preload("res://sfx/jump.wav"),
+    &"land": preload("res://sfx/land.wav"),
+}
+const TAPE_HISS := preload("res://sfx/tape_hiss.wav")
+
+var _voices: Array[AudioStreamPlayer] = []
+var _next_voice := 0
+var _wear := 0.0
+var _hiss_target_db := -80.0
+var _hiss_player: AudioStreamPlayer
+var _rng := RandomNumberGenerator.new()
+
+
+func _ready() -> void:
+    add_to_group("jam_sfx")
+    _rng.randomize()
+
+    for i in range(MAX_VOICES):
+        var voice := AudioStreamPlayer.new()
+        voice.volume_db = effect_volume_db
+        add_child(voice)
+        _voices.append(voice)
+
+    _hiss_player = AudioStreamPlayer.new()
+    add_child(_hiss_player)
+    var loop_stream := TAPE_HISS.duplicate() as AudioStreamWAV
+    loop_stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+    _hiss_player.stream = loop_stream
+    _hiss_player.volume_db = -80.0
+
 
 func play_event(event_name: StringName) -> void:
-    var freq: float = 440.0
-    var sweep: float = 0.0
-    var duration: float = 0.12
-    var noise_mix: float = 0.1
+    if not enabled:
+        return
 
-    match event_name:
-        &"record":
-            freq = 850.0
-            sweep = -350.0
-            duration = 0.99
+    var sound_name := event_name
+    if event_name == &"playback":
+        if _wear >= 0.75:
+            sound_name = &"playback_3"
+        elif _wear >= 0.25:
+            sound_name = &"playback_2"
 
-        &"rewind":
-            freq = 700.0
-            sweep = -550.0
-            duration = 0.35
-            noise_mix = 0.3
+    if not SOUNDS.has(sound_name):
+        push_warning("Unknown SFX event: %s" % event_name)
+        return
 
-        &"playback":
-            freq = 330.0
-            sweep = 220.0
-            duration = 0.13
+    # Use a free voice where possible so overlapping events aren't cut off.
+    var voice := _find_voice()
+    voice.stop()
+    voice.stream = SOUNDS[sound_name]
+    voice.volume_db = effect_volume_db
+    voice.pitch_scale = 1.0
 
-        &"erase":
-            freq = 240.0
-            duration = 0.09
-            noise_mix = 0.5
+    # Slight variation keeps repeated switches from sounding identical.
+    if event_name in [&"plate_on", &"plate_off", &"land"]:
+        voice.pitch_scale = _rng.randf_range(0.97, 1.04)
 
-        &"broken":
-            freq = 120.0
-            duration = 0.35
-            noise_mix = 0.8
+    voice.play()
 
-        &"sync":
-            freq = 520.0
-            sweep = 420.0
-            duration = 0.25
 
-        &"hit":
-            freq = 90.0
-            duration = 0.25
-            noise_mix = 0.95
+func set_wear(value: float) -> void:
+    _wear = clampf(value, 0.0, 1.0)
 
-        &"complete":
-            freq = 660.0
-            sweep = 440.0
-            duration = 0.45
 
-        _:
-            return
-    play_tone(freq, sweep, duration, noise_mix)
+func set_tape_state(is_playing: bool, wear: float) -> void:
+    set_wear(wear)
 
-func play_tone(freq: float, sweep: float, duration: float, noise_mix: float) -> void:
-    var sample_count: int = int(SAMPLE_RATE * duration)
+    if not enabled or not is_playing:
+        _hiss_target_db = -80.0
+        return
 
-    var bytes = PackedByteArray()
-    bytes.resize(sample_count * 2)
+    # Quiet when clean; louder as the analogue tape deteriorates.
+    _hiss_target_db = lerpf(-39.0, -22.0, _wear)
+    if not _hiss_player.playing:
+        _hiss_player.play()
 
-    var phase: float = 0.0
 
-    for i in range(sample_count):
-        var progress: float = float(i) / float(sample_count)
+func _process(delta: float) -> void:
+    if _hiss_player == null:
+        return
 
-        var curr_freq = freq + sweep * progress
+    _hiss_player.volume_db = move_toward(
+        _hiss_player.volume_db,
+        _hiss_target_db,
+        160.0 * delta
+    )
+    if _hiss_target_db <= -79.0 and _hiss_player.volume_db <= -79.0:
+        if _hiss_player.playing:
+            _hiss_player.stop()
 
-        phase += TAU * curr_freq / float(SAMPLE_RATE)
 
-        var tone: float = sin(phase)
-        var noise = rng.randf_range(-1.0, 1.0)
+func _find_voice() -> AudioStreamPlayer:
+    for offset in range(MAX_VOICES):
+        var index := (_next_voice + offset) % MAX_VOICES
+        if not _voices[index].playing:
+            _next_voice = (index + 1) % MAX_VOICES
+            return _voices[index]
 
-        var envelope: float = pow(1.0 - progress, 2.0) * minf(1.0, progress * 100.0)
-
-        var sample: float = (tone * (1.0 - noise_mix) + noise * noise_mix) * envelope * 0.22
-        bytes.encode_s16(i * 2, int(clampf(sample, -1.0, 1.0) * 32767.0))
-
-    var wave := AudioStreamWAV.new()
-    wave.format = AudioStreamWAV.FORMAT_16_BITS
-    wave.mix_rate = SAMPLE_RATE
-    wave.stereo = false
-    wave.data = bytes
-
-    var audio_player := AudioStreamPlayer.new()
-
-    add_child(audio_player)
-    audio_player.stream = wave
-    audio_player.volume_db = -9.0
-
-    audio_player.finished.connect(audio_player.queue_free)
-
-    audio_player.play()
+    var voice := _voices[_next_voice]
+    _next_voice = (_next_voice + 1) % MAX_VOICES
+    return voice

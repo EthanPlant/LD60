@@ -1,6 +1,8 @@
 class_name PlayerController
 extends CharacterBody2D
 
+signal jump
+
 @export var move_speed: float = 180.0
 @export var acceleration: float = 1400.0
 @export var friction: float = 1800.0
@@ -42,6 +44,7 @@ func apply_gravity(delta: float) -> void:
 func handle_jump() -> void:
     if Input.is_action_just_pressed("jump") and is_on_floor():
         velocity.y = jump_velocity
+        jump.emit()
 
 func handle_horizontal_movement(delta: float) -> void:
     var direction: float = Input.get_axis(

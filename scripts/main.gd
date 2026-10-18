@@ -39,6 +39,13 @@ func _process(_delta: float) -> void:
 		current_level.player.set_recording_visual(current_level.recorder.state == TapeRecorder.State.RECORDING)
 		vhs.set_wear(current_level.recorder.get_wear_ratio())
 
+		var tape_running := current_level.recorder.state in [
+			TapeRecorder.State.RECORDING,
+			TapeRecorder.State.PLAYING,
+		]
+
+		sfx.set_tape_state(tape_running, current_level.recorder.get_wear_ratio())
+
 func _unhandled_input(event: InputEvent) -> void:
 	if game_finished:
 		if event is InputEventKey:
@@ -77,6 +84,7 @@ func load_level(index: int) -> void:
 	current_level.completed.connect(_on_level_completed)
 
 	current_level.feedback_requested.connect(_on_feedback)
+	current_level.sfx_requested.connect(_on_sfx)
 	hud.begin_level(current_level.level_name, current_level.level_hint, current_level.recorder)
 	current_level.recorder.tape_event.connect(_on_tape_event)
 	
@@ -105,6 +113,7 @@ func finish_game() -> void:
 	hud.show_ending()
 
 func _on_title_start() -> void:
+	sfx.play_event(&"start")
 	title_screen.hide()
 	hud.show()
 
@@ -125,7 +134,11 @@ func _on_feedback(message: String) -> void:
 		
 	hud.show_feedback(message, danger)
 
+func _on_sfx(sfx_name: StringName) -> void:
+	sfx.play_event(sfx_name)
+
 func _on_tape_event(event_name: StringName) -> void:
+	sfx.set_wear(current_level.recorder.get_wear_ratio())
 	sfx.play_event(event_name)
 
 	if event_name == &"rewind":

@@ -2,6 +2,7 @@ class_name ElectricalBarrier
 extends Area2D
 
 signal player_hit
+signal state_change(energized: bool)
 
 @export var disabling_plate: PressurePlate
 
@@ -49,4 +50,5 @@ func reset_state() -> void:
 
 func _on_plate_changed(pressed: bool) -> void:
 	energized = not pressed
+	state_change.emit(energized)
 	update_visual()

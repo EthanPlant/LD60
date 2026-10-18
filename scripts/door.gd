@@ -1,6 +1,8 @@
 class_name Door
 extends StaticBody2D
 
+signal door_event(opened: bool)
+
 enum Mode {
     HOLD,
     TIMED
@@ -45,6 +47,8 @@ func set_open(should_open: bool) -> void:
     is_open = should_open
 
     collision_shape.set_deferred("disabled", is_open)
+
+    door_event.emit(is_open)
 
     update_visual()
 
