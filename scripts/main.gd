@@ -36,6 +36,7 @@ func _process(delta: float) -> void:
 
 	if is_instance_valid(current_level):
 		status_label.text = current_level.recorder.get_status_text()
+		current_level.player.set_recording_visual(current_level.recorder.state == TapeRecorder.State.RECORDING)
 		vhs.set_wear(current_level.recorder.get_wear_ratio())
 
 func _unhandled_input(event: InputEvent) -> void:

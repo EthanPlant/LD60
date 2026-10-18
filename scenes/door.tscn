@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c4olje064x3jm"]
 
 [ext_resource type="Script" uid="uid://doga6cw8upt83" path="res://scripts/door.gd" id="1_hpvv5"]
-[ext_resource type="Shader" uid="uid://cy2vdddb02bto" path="res://scenes/door.gdshader" id="2_uvdjg"]
+[ext_resource type="Shader" uid="uid://cy2vdddb02bto" path="res://shaders/door.gdshader" id="2_uvdjg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
 size = Vector2(28, 160)
