@@ -3,13 +3,11 @@ extends Area2D
 
 signal pressed_changed(pressed: bool)
 
-const INACTIVE_COLOUR := Color("#D9A441")
-const ACTIVE_COLOUR := Color("#85E08A")
-
 @onready var visual: Polygon2D = $Visual
 
 var is_pressed: bool = false
 var activators: Array[Node2D] = []
+var flash: float = 0.0
 
 func _ready() -> void:
 	add_to_group("puzzle_plates")
@@ -21,6 +19,13 @@ func _ready() -> void:
 	area_exited.connect(_on_activator_exited)
 
 	update_visual()
+
+func _process(delta: float) -> void:
+	if flash <= 0.0:
+		return
+
+	flash = move_toward(flash, 0.0, delta * 4.0)
+	visual.set_instance_shader_parameter("press_flash", flash)
 
 func _on_activator_entered(actor: Node2D) -> void:
 	if not actor.is_in_group("plate_activator"):
@@ -45,11 +50,13 @@ func update_pressed_state() -> void:
 		return
 
 	is_pressed = new_state
+	flash = 1.0
 	update_visual()
 	pressed_changed.emit(is_pressed)
 
 func update_visual() -> void:
-	visual.color = ACTIVE_COLOUR if is_pressed else INACTIVE_COLOUR
+	visual.set_instance_shader_parameter("activated", 1.0 if is_pressed else 0.0)
+	visual.set_instance_shader_parameter("press_flash", flash)
 
 func forget_activator(actor: Node2D) -> void:
 	activators.erase(actor)
