@@ -1,9 +1,13 @@
 [gd_scene format=3 uid="uid://dc25ph04e7nq5"]
 
 [ext_resource type="Script" uid="uid://dlymoydm6embc" path="res://scripts/electrical_barrier.gd" id="1_i5pxv"]
+[ext_resource type="Shader" uid="uid://b5u86bndxtmuy" path="res://shaders/electrical_barrier.gdshader" id="2_8p1yo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
 size = Vector2(16, 220)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l5lq6"]
+shader = ExtResource("2_8p1yo")
 
 [node name="ElectricalBarrier" type="Area2D" unique_id=295602388]
 collision_layer = 0
@@ -11,7 +15,17 @@ collision_mask = 2
 script = ExtResource("1_i5pxv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2044043567]
+visible = false
 shape = SubResource("RectangleShape2D_epxd5")
 
 [node name="Visual" type="Polygon2D" parent="." unique_id=340837997]
+material = SubResource("ShaderMaterial_l5lq6")
 polygon = PackedVector2Array(-8, -110, 8, -110, 8, 110, -8, 110)
+
+[node name="Polygon2D2" type="Polygon2D" parent="." unique_id=422104876]
+color = Color(0.3779188, 0.37791887, 0.37791884, 1)
+polygon = PackedVector2Array(-8, 110, 8, 110, 8, 100, -8, 100)
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=419415347]
+color = Color(0.3779188, 0.37791887, 0.37791884, 1)
+polygon = PackedVector2Array(-8, -110, 8, -110, 8, -100, -8, -100)

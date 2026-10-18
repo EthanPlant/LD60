@@ -3,9 +3,6 @@ extends Area2D
 
 signal player_hit
 
-const ACTIVE_COLOUR := Color("#79DFFF")
-const INACTIVE_COLOUR := Color("#526A75", 0.25)
-
 @export var disabling_plate: PressurePlate
 
 @onready var visual: Polygon2D = $Visual
@@ -36,7 +33,7 @@ func _physics_process(_delta: float) -> void:
             return
 
 func update_visual() -> void:
-    visual.color = ACTIVE_COLOUR if energized else INACTIVE_COLOUR
+    visual.set_instance_shader_parameter("powered", 1.0 if energized else 0.0)
 
 func reset_state() -> void:
     hit_latched = false

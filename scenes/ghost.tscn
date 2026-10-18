@@ -19,6 +19,6 @@ script = ExtResource("1_t76o2")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1310219589]
 shape = SubResource("RectangleShape2D_epxd5")
 
-[node name="Polygon2D" type="Polygon2D" parent="." unique_id=1608543250]
+[node name="Visual" type="Polygon2D" parent="." unique_id=1608543250]
 material = SubResource("ShaderMaterial_tbgi4")
 polygon = PackedVector2Array(-10, -14, 10, -14, 10, 14, -10, 14)
