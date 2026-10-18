@@ -33,6 +33,7 @@ func _physics_process(delta: float) -> void:
     handle_horizontal_movement(delta)
 
     move_and_slide()
+    global_position.x = clampf(global_position.x, 10, 950) # Clamp the player into the level
 
 func apply_gravity(delta: float) -> void:
     if not is_on_floor():
