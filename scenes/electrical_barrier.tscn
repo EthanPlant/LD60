@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" uid="uid://dlymoydm6embc" path="res://scripts/electrical_barrier.gd" id="1_i5pxv"]
 [ext_resource type="Shader" uid="uid://b5u86bndxtmuy" path="res://shaders/electrical_barrier.gdshader" id="2_8p1yo"]
+[ext_resource type="Shader" uid="uid://jc1qdka04gts" path="res://shaders/electrical_emitter.gdshader" id="3_m4pk8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
 size = Vector2(16, 220)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_l5lq6"]
 shader = ExtResource("2_8p1yo")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8p1yo"]
+shader = ExtResource("3_m4pk8")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3cnto"]
+shader = ExtResource("3_m4pk8")
 
 [node name="ElectricalBarrier" type="Area2D" unique_id=295602388]
 collision_layer = 0
@@ -22,10 +29,14 @@ shape = SubResource("RectangleShape2D_epxd5")
 material = SubResource("ShaderMaterial_l5lq6")
 polygon = PackedVector2Array(-8, -110, 8, -110, 8, 110, -8, 110)
 
-[node name="Polygon2D2" type="Polygon2D" parent="." unique_id=422104876]
+[node name="TopCap" type="Polygon2D" parent="." unique_id=422104876]
+material = SubResource("ShaderMaterial_8p1yo")
+position = Vector2(0, -110)
 color = Color(0.3779188, 0.37791887, 0.37791884, 1)
-polygon = PackedVector2Array(-8, 110, 8, 110, 8, 100, -8, 100)
+polygon = PackedVector2Array(-22, -12, 22, -12, 22, 12, -22, 12)
 
-[node name="Polygon2D" type="Polygon2D" parent="." unique_id=419415347]
+[node name="BottomCap" type="Polygon2D" parent="." unique_id=1178908433]
+material = SubResource("ShaderMaterial_3cnto")
+position = Vector2(0, 110)
 color = Color(0.3779188, 0.37791887, 0.37791884, 1)
-polygon = PackedVector2Array(-8, -110, 8, -110, 8, -100, -8, -100)
+polygon = PackedVector2Array(-22, -12, 22, -12, 22, 12, -22, 12)

@@ -12,7 +12,7 @@ enum Mode {
 
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var visual: Polygon2D = $Visual
-
+@onready var frame_visual: Polygon2D = $Frame
 
 var is_open: bool = false
 var time_remaining = 0.0
@@ -87,6 +87,7 @@ func set_wipe_progress(value: float) ->  void:
     wipe_progress = value
 
     visual.set_instance_shader_parameter("open_progress", wipe_progress)
+    frame_visual.set_instance_shader_parameter("open_amount", wipe_progress)
 
 func _on_plate_changed(pressed: bool) -> void:
     match mode:

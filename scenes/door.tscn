@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://doga6cw8upt83" path="res://scripts/door.gd" id="1_hpvv5"]
 [ext_resource type="Shader" uid="uid://cy2vdddb02bto" path="res://shaders/door.gdshader" id="2_uvdjg"]
+[ext_resource type="Shader" uid="uid://cx4t1hjjl1bvp" path="res://shaders/door_frame.gdshader" id="3_83dcw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
 size = Vector2(28, 160)
@@ -12,6 +13,9 @@ shader_parameter/door_colour = Color(0.68, 0.21, 0.29, 1)
 shader_parameter/scan_colour = Color(0.58, 0.9, 1, 1)
 shader_parameter/door_size = Vector2(28, 160)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uvdjg"]
+shader = ExtResource("3_83dcw")
+
 [node name="Door" type="StaticBody2D" unique_id=389433874]
 script = ExtResource("1_hpvv5")
 
@@ -21,3 +25,7 @@ shape = SubResource("RectangleShape2D_epxd5")
 [node name="Visual" type="Polygon2D" parent="." unique_id=207547668]
 material = SubResource("ShaderMaterial_xtofl")
 polygon = PackedVector2Array(-14, -80, 14, -80, 14, 80, -14, 80)
+
+[node name="Frame" type="Polygon2D" parent="." unique_id=1812653662]
+material = SubResource("ShaderMaterial_uvdjg")
+polygon = PackedVector2Array(-20, -88, 20, -88, 20, 80, -20, 80)
