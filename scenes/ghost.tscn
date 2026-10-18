@@ -1,9 +1,14 @@
 [gd_scene format=3 uid="uid://dtu8nhmlvtxv8"]
 
 [ext_resource type="Script" uid="uid://iamgywltcn23" path="res://scripts/ghost.gd" id="1_t76o2"]
+[ext_resource type="Shader" uid="uid://b0cpcxl3he7kv" path="res://shaders/ghost.gdshader" id="2_l5lq6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
 size = Vector2(20, 28)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tbgi4"]
+shader = ExtResource("2_l5lq6")
+shader_parameter/ghost_color = Color(0.35, 0.85, 1, 0.75)
 
 [node name="Ghost" type="Area2D" unique_id=577721749]
 collision_layer = 4
@@ -15,5 +20,5 @@ script = ExtResource("1_t76o2")
 shape = SubResource("RectangleShape2D_epxd5")
 
 [node name="Polygon2D" type="Polygon2D" parent="." unique_id=1608543250]
-color = Color(0.45882353, 0.8352941, 0.9019608, 0.44313726)
+material = SubResource("ShaderMaterial_tbgi4")
 polygon = PackedVector2Array(-10, -14, 10, -14, 10, 14, -10, 14)

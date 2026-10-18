@@ -108,6 +108,9 @@ func complete_rewind() -> void:
     ghost = GHOST_SCENE.instantiate() as GhostReplay
     ghost_container.add_child(ghost)
 
+    var ghost_visual := ghost.get_node("Visual") as CanvasItem
+    ghost_visual.set_instance_shader_parameter("wear", get_wear_ratio())
+
     ghost.load_recording(tape)
     ghost.playback_finished.connect(_on_ghost_playback_finished)
 
