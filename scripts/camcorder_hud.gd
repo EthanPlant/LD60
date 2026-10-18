@@ -172,7 +172,7 @@ func draw_tape_panel() -> void:
 
             draw_rect(rect, segment_colour)
 
-        text("PLAY %02d/%02d" % [ playback_number, TapeRecorder.MAX_PLAYBACKS ], x + 18, 152, 12, MUTED)
+        text("PLAY %02d/%02d" % [ playback_number, TapeRecorder.MAX_PLAYBACKS ], x + 18, 125, 12, MUTED)
         text("%.2fs AVAILABLE" % available, x + 175, 125, 12, MUTED, 150)
 
 func draw_footer() -> void:

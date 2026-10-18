@@ -18,7 +18,7 @@ size = Vector2(316, 12)
 
 [node name="Level" type="Node2D" unique_id=1507109919]
 script = ExtResource("1_yc2un")
-level_name = "Last Frame"
+level_name = "06- Last Frame"
 level_hint = "One last time. Make every second count."
 
 [node name="Backdrop" type="Node2D" parent="." unique_id=918744514]

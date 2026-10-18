@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://d3wuawspjs7l0" path="res://scripts/vhs_overlay.gd" id="2_sugp2"]
 [ext_resource type="FontFile" uid="uid://dklfexvq2pldk" path="res://VCR_OSD_MONO_1.001.ttf" id="3_tefeu"]
 [ext_resource type="Script" uid="uid://bnlh7nd31dbhj" path="res://scripts/sound_effects.gd" id="4_jyhfs"]
+[ext_resource type="Script" uid="uid://xn7nyfex5xx5" path="res://scripts/title_screen.gd" id="4_o6xl0"]
 [ext_resource type="Script" uid="uid://bymdvwyd2gvyu" path="res://scripts/camcorder_hud.gd" id="4_tbgi4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0wfyh"]
@@ -32,6 +33,17 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("4_tbgi4")
+display_font = ExtResource("3_tefeu")
+
+[node name="TitleScreen" type="Control" parent="HUD" unique_id=1796950546]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_o6xl0")
 display_font = ExtResource("3_tefeu")
 
 [node name="FX" type="CanvasLayer" parent="." unique_id=530681120]

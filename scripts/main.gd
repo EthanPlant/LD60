@@ -9,6 +9,7 @@ const LEVEL_SCENES = [
 	preload("res://scenes/levels/level_06.tscn"),
 ]
 
+@onready var title_screen: TitleScreen = $HUD/TitleScreen
 @onready var level_container: Node2D = $LevelContainer
 @onready var hud: CamcorderHUD = $HUD/OSD
 @onready var vhs: VHSOverlay = $FX
@@ -19,9 +20,18 @@ var current_level_index = 0
 var game_finished: bool = false
 
 func _ready() -> void:
-	load_level(0)
+	title_screen.start_requested.connect(_on_title_start)
+
+	hud.hide()
+	title_screen.show_screen()
+
+	vhs.reset_effect()
+	vhs.set_wear(0.12)
 
 func _process(_delta: float) -> void:
+	if current_level == null:
+		return
+
 	if game_finished:
 		return
 
@@ -93,6 +103,14 @@ func finish_game() -> void:
 	sfx.play_event(&"complete")
 
 	hud.show_ending()
+
+func _on_title_start() -> void:
+	title_screen.hide()
+	hud.show()
+
+	vhs.reset_effect()
+
+	load_level(0)
 
 func _on_level_completed() -> void:
 	call_deferred("advance_level")
