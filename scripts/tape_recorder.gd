@@ -80,6 +80,9 @@ func capture_frame() -> void:
 		start_rewind()
 
 func start_rewind() -> void:
+	if state == State.REWINDING:
+		return
+
 	if tape.is_empty():
 		tape.append(player.global_transform)
 
