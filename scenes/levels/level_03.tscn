@@ -9,13 +9,19 @@
 [ext_resource type="PackedScene" uid="uid://b7nun7lvs6al5" path="res://scenes/sync_gate.tscn" id="6_1jnh5"]
 [ext_resource type="Script" uid="uid://b73pxe11uesnk" path="res://scripts/tape_recorder.gd" id="6_foqc1"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hvqp8"]
 size = Vector2(960, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
+size = Vector2(230, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jgt0v"]
+size = Vector2(80, 20)
 
 [node name="Level" type="Node2D" unique_id=1507109919]
 script = ExtResource("1_r8ojw")
 level_name = "03 - Two of Us"
-level_hint = "Two switches. Two versions of you."
+level_hint = "You'll take the high road and I'll take the low road"
 
 [node name="Backdrop" type="Node2D" parent="." unique_id=1487556434]
 script = ExtResource("2_jgt0v")
@@ -24,27 +30,48 @@ script = ExtResource("2_jgt0v")
 position = Vector2(480, 490)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=1625195843]
-shape = SubResource("RectangleShape2D_epxd5")
+shape = SubResource("RectangleShape2D_hvqp8")
 
 [node name="Visual" type="Polygon2D" parent="Floor" unique_id=233176641]
 color = Color(0.20784314, 0.2784314, 0.36862746, 1)
 polygon = PackedVector2Array(-480, -50, 480, -50, 480, 50, -480, 50)
 
+[node name="UpperPlatform" type="StaticBody2D" parent="." unique_id=1527947305]
+position = Vector2(410, 391)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UpperPlatform" unique_id=2049229760]
+shape = SubResource("RectangleShape2D_epxd5")
+
+[node name="Visual" type="Polygon2D" parent="UpperPlatform" unique_id=256979743]
+color = Color(0.20784314, 0.2784314, 0.36862746, 1)
+polygon = PackedVector2Array(-115, -6, 115, -6, 115, 6, -115, 6)
+
+[node name="LowStep" type="StaticBody2D" parent="." unique_id=1252918288]
+position = Vector2(225, 430)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LowStep" unique_id=1194311828]
+shape = SubResource("RectangleShape2D_jgt0v")
+
+[node name="Polygon2D" type="Polygon2D" parent="LowStep" unique_id=415182479]
+color = Color(0.20784314, 0.2784314, 0.36862746, 1)
+polygon = PackedVector2Array(-40, -10, 40, -10, 40, 10, -40, 10)
+
 [node name="Player" parent="." unique_id=824865768 instance=ExtResource("2_1jnh5")]
 position = Vector2(80, 400)
 
 [node name="PressurePlateA" parent="." unique_id=229689826 instance=ExtResource("3_jgt0v")]
-position = Vector2(230, 435)
+position = Vector2(415, 380)
 
 [node name="PressurePlateB" parent="." unique_id=161781291 instance=ExtResource("3_jgt0v")]
-position = Vector2(500, 435)
+position = Vector2(585, 435)
 
 [node name="Door" parent="." unique_id=389433874 instance=ExtResource("4_hvqp8")]
-position = Vector2(720, 360)
+position = Vector2(745, 360)
 mode = 1
+open_duration = 3.5
 
 [node name="Exit" parent="." unique_id=732288300 instance=ExtResource("5_8w8tq")]
-position = Vector2(875, 415)
+position = Vector2(880, 415)
 
 [node name="GhostContainer" type="Node2D" parent="." unique_id=1331270279]
 
@@ -52,6 +79,7 @@ position = Vector2(875, 415)
 plate_a = NodePath("../PressurePlateA")
 plate_b = NodePath("../PressurePlateB")
 target_door = NodePath("../Door")
+unlock_duration = 3.5
 
 [node name="Recorder" type="Node" parent="." unique_id=1520913664]
 script = ExtResource("6_foqc1")

@@ -5,6 +5,8 @@ const LEVEL_SCENES = [
 	preload("res://scenes/levels/level_02.tscn"),
 	preload("res://scenes/levels/level_03.tscn"),
 	preload("res://scenes/levels/level_04.tscn"),
+	preload("res://scenes/levels/level_05.tscn"),
+	preload("res://scenes/levels/level_06.tscn"),
 ]
 
 @onready var level_container: Node2D = $LevelContainer

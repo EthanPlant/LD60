@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://b7owxcpv610lf"]
+
+[ext_resource type="Script" uid="uid://7u2dts13niuo" path="res://scripts/level.gd" id="1_ot78m"]
+[ext_resource type="Script" uid="uid://d3xm8ecxic2v1" path="res://scripts/backdrop.gd" id="2_c1tix"]
+[ext_resource type="PackedScene" uid="uid://b8y02c78mib4c" path="res://scenes/player.tscn" id="3_ywrx1"]
+[ext_resource type="PackedScene" uid="uid://buqhc457phf5q" path="res://scenes/pressure_plate.tscn" id="4_nodfw"]
+[ext_resource type="PackedScene" uid="uid://c4olje064x3jm" path="res://scenes/door.tscn" id="5_7gy4l"]
+[ext_resource type="PackedScene" uid="uid://c0k7vr3guvbrv" path="res://scenes/exit.tscn" id="7_f3k6o"]
+[ext_resource type="Script" uid="uid://b73pxe11uesnk" path="res://scripts/tape_recorder.gd" id="8_27puk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
+size = Vector2(960, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gkpor"]
+size = Vector2(160, 12)
+
+[node name="Level" type="Node2D" unique_id=1507109919]
+script = ExtResource("1_ot78m")
+level_name = "05 - Bad Tracking"
+level_hint = "Your recording doesn't forget how it began, it forgets how it ended."
+
+[node name="Backdrop" type="Node2D" parent="." unique_id=918744514]
+script = ExtResource("2_c1tix")
+
+[node name="Floor" type="StaticBody2D" parent="." unique_id=723629486]
+position = Vector2(480, 490)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=1625195843]
+shape = SubResource("RectangleShape2D_epxd5")
+
+[node name="Visual" type="Polygon2D" parent="Floor" unique_id=233176641]
+color = Color(0.20784314, 0.2784314, 0.36862746, 1)
+polygon = PackedVector2Array(-480, -50, 480, -50, 480, 50, -480, 50)
+
+[node name="UpperPlatform" type="StaticBody2D" parent="." unique_id=1162856345]
+position = Vector2(405, 391)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UpperPlatform" unique_id=545172905]
+shape = SubResource("RectangleShape2D_gkpor")
+
+[node name="Visual" type="Polygon2D" parent="UpperPlatform" unique_id=2042251158]
+color = Color(0.20784314, 0.2784314, 0.36862746, 1)
+polygon = PackedVector2Array(-80, -6, 80, -6, 80, 6, -80, 6)
+
+[node name="Player" parent="." unique_id=824865768 instance=ExtResource("3_ywrx1")]
+position = Vector2(80, 400)
+
+[node name="PressurePlateA" parent="." unique_id=229689826 instance=ExtResource("4_nodfw")]
+position = Vector2(235, 435)
+
+[node name="PressurePlateB" parent="." unique_id=2069090187 instance=ExtResource("4_nodfw")]
+position = Vector2(425, 380)
+
+[node name="DoorA" parent="." unique_id=389433874 node_paths=PackedStringArray("activation_plate") instance=ExtResource("5_7gy4l")]
+position = Vector2(490, 360)
+activation_plate = NodePath("../PressurePlateA")
+open_duration = 2.0
+
+[node name="DoorB" parent="." unique_id=1527633591 node_paths=PackedStringArray("activation_plate") instance=ExtResource("5_7gy4l")]
+position = Vector2(760, 360)
+mode = 1
+activation_plate = NodePath("../PressurePlateB")
+open_duration = 3.5
+
+[node name="Exit" parent="." unique_id=732288300 instance=ExtResource("7_f3k6o")]
+position = Vector2(880, 415)
+
+[node name="GhostContainer" type="Node2D" parent="." unique_id=1331270279]
+
+[node name="Recorder" type="Node" parent="." unique_id=1520913664]
+script = ExtResource("8_27puk")

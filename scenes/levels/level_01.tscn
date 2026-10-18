@@ -11,10 +11,13 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
 size = Vector2(960, 100)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bogoe"]
+size = Vector2(70, 20)
+
 [node name="Level" type="Node2D" unique_id=1507109919]
 script = ExtResource("1_50wog")
 level_name = "01 - Double Exposure"
-level_hint = "Record yourself holding the plate, then follow your ghost."
+level_hint = "Record your movements. Your ghost will repeat everything."
 
 [node name="Backdrop" type="Node2D" parent="." unique_id=471294362]
 script = ExtResource("2_1ey3t")
@@ -29,18 +32,28 @@ shape = SubResource("RectangleShape2D_epxd5")
 color = Color(0.20784314, 0.2784314, 0.36862746, 1)
 polygon = PackedVector2Array(-480, -50, 480, -50, 480, 50, -480, 50)
 
+[node name="LowStep" type="StaticBody2D" parent="." unique_id=36071252]
+position = Vector2(195, 430)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LowStep" unique_id=2105828382]
+shape = SubResource("RectangleShape2D_bogoe")
+
+[node name="Polygon2D" type="Polygon2D" parent="LowStep" unique_id=859267648]
+color = Color(0.20784314, 0.2784314, 0.36862746, 1)
+polygon = PackedVector2Array(-35, -10, 35, -10, 35, 10, -35, 10)
+
 [node name="Player" parent="." unique_id=824865768 instance=ExtResource("2_50wog")]
 position = Vector2(80, 400)
 
 [node name="PressurePlate" parent="." unique_id=229689826 instance=ExtResource("3_1ey3t")]
-position = Vector2(300, 435)
+position = Vector2(325, 435)
 
 [node name="Door" parent="." unique_id=389433874 node_paths=PackedStringArray("activation_plate") instance=ExtResource("4_t0hvh")]
-position = Vector2(590, 360)
+position = Vector2(670, 360)
 activation_plate = NodePath("../PressurePlate")
 
 [node name="Exit" parent="." unique_id=732288300 instance=ExtResource("5_1ey3t")]
-position = Vector2(830, 415)
+position = Vector2(880, 415)
 
 [node name="GhostContainer" type="Node2D" parent="." unique_id=1331270279]
 

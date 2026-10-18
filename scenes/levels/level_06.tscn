@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://d3jrrn7p00r40"]
+
+[ext_resource type="Script" uid="uid://7u2dts13niuo" path="res://scripts/level.gd" id="1_yc2un"]
+[ext_resource type="Script" uid="uid://d3xm8ecxic2v1" path="res://scripts/backdrop.gd" id="2_s7m4s"]
+[ext_resource type="PackedScene" uid="uid://b8y02c78mib4c" path="res://scenes/player.tscn" id="3_6h3uw"]
+[ext_resource type="PackedScene" uid="uid://buqhc457phf5q" path="res://scenes/pressure_plate.tscn" id="4_17n5y"]
+[ext_resource type="PackedScene" uid="uid://c4olje064x3jm" path="res://scenes/door.tscn" id="5_tg547"]
+[ext_resource type="PackedScene" uid="uid://c0k7vr3guvbrv" path="res://scenes/exit.tscn" id="6_6vksy"]
+[ext_resource type="Script" uid="uid://b73pxe11uesnk" path="res://scripts/tape_recorder.gd" id="7_pwpgl"]
+[ext_resource type="PackedScene" uid="uid://b7nun7lvs6al5" path="res://scenes/sync_gate.tscn" id="7_s7m4s"]
+[ext_resource type="PackedScene" uid="uid://dc25ph04e7nq5" path="res://scenes/electrical_barrier.tscn" id="9_6h3uw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
+size = Vector2(960, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gkpor"]
+size = Vector2(316, 12)
+
+[node name="Level" type="Node2D" unique_id=1507109919]
+script = ExtResource("1_yc2un")
+level_name = "Last Frame"
+level_hint = "One last time. Make every second count."
+
+[node name="Backdrop" type="Node2D" parent="." unique_id=918744514]
+script = ExtResource("2_s7m4s")
+
+[node name="Floor" type="StaticBody2D" parent="." unique_id=723629486]
+position = Vector2(480, 490)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=1625195843]
+shape = SubResource("RectangleShape2D_epxd5")
+
+[node name="Visual" type="Polygon2D" parent="Floor" unique_id=233176641]
+color = Color(0.20784314, 0.2784314, 0.36862746, 1)
+polygon = PackedVector2Array(-480, -50, 480, -50, 480, 50, -480, 50)
+
+[node name="UpperPlatform" type="StaticBody2D" parent="." unique_id=1162856345]
+position = Vector2(342, 391)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UpperPlatform" unique_id=545172905]
+shape = SubResource("RectangleShape2D_gkpor")
+
+[node name="Visual" type="Polygon2D" parent="UpperPlatform" unique_id=2042251158]
+color = Color(0.20784314, 0.2784314, 0.36862746, 1)
+polygon = PackedVector2Array(-158, -6, 158, -6, 158, 6, -158, 6)
+
+[node name="Player" parent="." unique_id=824865768 instance=ExtResource("3_6h3uw")]
+position = Vector2(80, 400)
+
+[node name="PressurePlateA" parent="." unique_id=229689826 instance=ExtResource("4_17n5y")]
+position = Vector2(265, 380)
+
+[node name="PressurePlateB" parent="." unique_id=2069090187 instance=ExtResource("4_17n5y")]
+position = Vector2(645, 435)
+
+[node name="PressurePlateC" parent="." unique_id=1004454658 instance=ExtResource("4_17n5y")]
+position = Vector2(440, 380)
+
+[node name="Door" parent="." unique_id=389433874 instance=ExtResource("5_tg547")]
+position = Vector2(765, 360)
+mode = 1
+open_duration = 2.0
+
+[node name="Exit" parent="." unique_id=732288300 instance=ExtResource("6_6vksy")]
+position = Vector2(880, 415)
+
+[node name="GhostContainer" type="Node2D" parent="." unique_id=1331270279]
+
+[node name="SyncGate" parent="." unique_id=298065327 node_paths=PackedStringArray("plate_a", "plate_b", "target_door") instance=ExtResource("7_s7m4s")]
+plate_a = NodePath("../PressurePlateB")
+plate_b = NodePath("../PressurePlateC")
+target_door = NodePath("../Door")
+
+[node name="Recorder" type="Node" parent="." unique_id=1520913664]
+script = ExtResource("7_pwpgl")
+
+[node name="ElectricalBarrier" parent="." unique_id=295602388 node_paths=PackedStringArray("disabling_plate") instance=ExtResource("9_6h3uw")]
+position = Vector2(550, 330)
+disabling_plate = NodePath("../PressurePlateA")

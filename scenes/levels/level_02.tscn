@@ -8,13 +8,16 @@
 [ext_resource type="PackedScene" uid="uid://c0k7vr3guvbrv" path="res://scenes/exit.tscn" id="5_yklhy"]
 [ext_resource type="Script" uid="uid://b73pxe11uesnk" path="res://scripts/tape_recorder.gd" id="6_o4ql5"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_keemd"]
 size = Vector2(960, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_epxd5"]
+size = Vector2(110, 32)
 
 [node name="Level" type="Node2D" unique_id=1507109919]
 script = ExtResource("1_a3l5x")
 level_name = "02 - Hold the Line"
-level_hint = "The door won't stay open. Timing is everything."
+level_hint = "Sometimes your past self needs to arrive fashionably late."
 
 [node name="Backdrop" type="Node2D" parent="." unique_id=777094720]
 script = ExtResource("2_ppbiy")
@@ -23,25 +26,36 @@ script = ExtResource("2_ppbiy")
 position = Vector2(480, 490)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=1625195843]
-shape = SubResource("RectangleShape2D_epxd5")
+shape = SubResource("RectangleShape2D_keemd")
 
 [node name="Visual" type="Polygon2D" parent="Floor" unique_id=233176641]
 color = Color(0.20784314, 0.2784314, 0.36862746, 1)
 polygon = PackedVector2Array(-480, -50, 480, -50, 480, 50, -480, 50)
 
+[node name="SwitchPlatform" type="StaticBody2D" parent="." unique_id=1763367390]
+position = Vector2(345, 424)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SwitchPlatform" unique_id=1516864814]
+shape = SubResource("RectangleShape2D_epxd5")
+
+[node name="Visual" type="Polygon2D" parent="SwitchPlatform" unique_id=1462880530]
+color = Color(0.20784314, 0.2784314, 0.36862746, 1)
+polygon = PackedVector2Array(-55, -16, 55, -16, 55, 16, -55, 16)
+
 [node name="Player" parent="." unique_id=824865768 instance=ExtResource("2_keemd")]
 position = Vector2(80, 400)
 
 [node name="PressurePlate" parent="." unique_id=229689826 instance=ExtResource("3_ppbiy")]
-position = Vector2(300, 435)
+position = Vector2(335, 403)
 
 [node name="Door" parent="." unique_id=389433874 node_paths=PackedStringArray("activation_plate") instance=ExtResource("4_c6rld")]
-position = Vector2(590, 360)
+position = Vector2(735, 360)
 mode = 1
 activation_plate = NodePath("../PressurePlate")
+open_duration = 1.5
 
 [node name="Exit" parent="." unique_id=732288300 instance=ExtResource("5_yklhy")]
-position = Vector2(830, 415)
+position = Vector2(880, 415)
 
 [node name="GhostContainer" type="Node2D" parent="." unique_id=1331270279]
 
