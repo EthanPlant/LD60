@@ -3,7 +3,9 @@
 [ext_resource type="Script" uid="uid://c014d6i0bxm6s" path="res://scripts/main.gd" id="1_jyhfs"]
 [ext_resource type="Shader" uid="uid://c30vwr8aguna5" path="res://shaders/vhs.gdshader" id="2_0wfyh"]
 [ext_resource type="Script" uid="uid://d3wuawspjs7l0" path="res://scripts/vhs_overlay.gd" id="2_sugp2"]
+[ext_resource type="FontFile" uid="uid://dklfexvq2pldk" path="res://VCR_OSD_MONO_1.001.ttf" id="3_tefeu"]
 [ext_resource type="Script" uid="uid://bnlh7nd31dbhj" path="res://scripts/sound_effects.gd" id="4_jyhfs"]
+[ext_resource type="Script" uid="uid://bymdvwyd2gvyu" path="res://scripts/camcorder_hud.gd" id="4_tbgi4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0wfyh"]
 shader = ExtResource("2_0wfyh")
@@ -19,6 +21,19 @@ script = ExtResource("1_jyhfs")
 
 [node name="LevelContainer" type="Node2D" parent="." unique_id=1406429390]
 
+[node name="HUD" type="CanvasLayer" parent="." unique_id=2090948118]
+
+[node name="OSD" type="Control" parent="HUD" unique_id=1572632846]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_tbgi4")
+display_font = ExtResource("3_tefeu")
+
 [node name="FX" type="CanvasLayer" parent="." unique_id=530681120]
 script = ExtResource("2_sugp2")
 
@@ -31,40 +46,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
-
-[node name="HUD" type="CanvasLayer" parent="." unique_id=1188671337]
-
-[node name="LevelLabel" type="Label" parent="HUD" unique_id=531972098]
-offset_left = 20.0
-offset_top = 16.0
-offset_right = 60.0
-offset_bottom = 39.0
-theme_override_font_sizes/font_size = 18
-text = "LEVEL"
-
-[node name="StatusLabel" type="Label" parent="HUD" unique_id=2108641747]
-offset_left = 20.0
-offset_top = 44.0
-offset_right = 920.0
-offset_bottom = 84.0
-theme_override_font_sizes/font_size = 18
-text = "STATUS"
-
-[node name="HintLabel" type="Label" parent="HUD" unique_id=1844191085]
-offset_left = 20.0
-offset_top = 505.0
-offset_right = 60.0
-offset_bottom = 528.0
-theme_override_font_sizes/font_size = 18
-text = "HINT"
-
-[node name="MessageLabel" type="Label" parent="HUD" unique_id=314398196]
-offset_left = 250.0
-offset_top = 95.0
-offset_right = 710.0
-offset_bottom = 135.0
-theme_override_font_sizes/font_size = 20
-horizontal_alignment = 1
 
 [node name="SFX" type="Node" parent="." unique_id=2045723275]
 script = ExtResource("4_jyhfs")

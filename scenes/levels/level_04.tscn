@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://7u2dts13niuo" path="res://scripts/level.gd" id="1_ypi4k"]
 [ext_resource type="PackedScene" uid="uid://b8y02c78mib4c" path="res://scenes/player.tscn" id="2_cw75u"]
+[ext_resource type="Script" uid="uid://d3xm8ecxic2v1" path="res://scripts/backdrop.gd" id="2_gkpor"]
 [ext_resource type="PackedScene" uid="uid://buqhc457phf5q" path="res://scenes/pressure_plate.tscn" id="3_gkpor"]
 [ext_resource type="PackedScene" uid="uid://c4olje064x3jm" path="res://scenes/door.tscn" id="4_a0uur"]
 [ext_resource type="PackedScene" uid="uid://dc25ph04e7nq5" path="res://scenes/electrical_barrier.tscn" id="5_cw75u"]
@@ -15,6 +16,9 @@ size = Vector2(960, 100)
 script = ExtResource("1_ypi4k")
 level_name = "04 - Crossfade"
 level_hint = "One recording. Two actions. Stay ahead of the tape."
+
+[node name="Backdrop" type="Node2D" parent="." unique_id=918744514]
+script = ExtResource("2_gkpor")
 
 [node name="Floor" type="StaticBody2D" parent="." unique_id=723629486]
 position = Vector2(480, 490)

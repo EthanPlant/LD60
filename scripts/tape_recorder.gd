@@ -170,6 +170,21 @@ func get_usable_frames() -> Array[Transform2D]:
 	
 	return result
 
+func get_recorded_seconds() -> float:
+	return float(tape.size()) / float(Engine.physics_ticks_per_second)
+
+
+func get_usable_seconds() -> float:
+	if tape.is_empty():
+		return 0.0
+
+	if not tape_wear_enabled:
+		return get_recorded_seconds()
+
+	var wear_seconds: float = (float(maxi(0, playback_count - 1)) * WEAR_PER_REPLAY)
+
+	return maxf(0.0, get_recorded_seconds() - wear_seconds)
+
 func can_play_again():
 	if not tape_wear_enabled:
 		return true
@@ -182,22 +197,23 @@ func get_wear_ratio() -> float:
 
 	return clampf(float(maxi(0, playback_count - 1)) / 2.0, 0.0, 1.0)
 
-func get_status_text() -> String:
-	match state:
-		State.READY:
-			return "READY | R: Record | Backspace: Reset"
+func get_condition() -> String:
+	if tape.is_empty():
+		return "NO TAPE"
 
-		State.RECORDING:
-			var seconds: float = (float(tape.size()) / float(Engine.physics_ticks_per_second))
-			return "REC %.1f / %.1f s | R: Stop" % [ seconds, MAX_SECONDS ]
+	if not tape_wear_enabled:
+		return "CLEAN"
 
-		State.REWINDING:
-			return "REWINDING"
+	if playback_count == 0:
+		return "FRESH"
+	elif playback_count == 1:
+		return "CLEAN"
+	elif playback_count == 2:
+		return "WORN"
+	elif playback_count == 3:
+		return "DAMAGED"
 
-		State.PLAYING:
-			return "PLAYBACK | R: Replay | Backspace: Erase"
-
-	return ""
+	return "BROKEN"
 
 func _on_ghost_playback_finished() -> void:
 	remove_ghost()

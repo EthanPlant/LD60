@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://7u2dts13niuo" path="res://scripts/level.gd" id="1_r8ojw"]
 [ext_resource type="PackedScene" uid="uid://b8y02c78mib4c" path="res://scenes/player.tscn" id="2_1jnh5"]
+[ext_resource type="Script" uid="uid://d3xm8ecxic2v1" path="res://scripts/backdrop.gd" id="2_jgt0v"]
 [ext_resource type="PackedScene" uid="uid://buqhc457phf5q" path="res://scenes/pressure_plate.tscn" id="3_jgt0v"]
 [ext_resource type="PackedScene" uid="uid://c4olje064x3jm" path="res://scenes/door.tscn" id="4_hvqp8"]
 [ext_resource type="PackedScene" uid="uid://c0k7vr3guvbrv" path="res://scenes/exit.tscn" id="5_8w8tq"]
@@ -15,6 +16,9 @@ size = Vector2(960, 100)
 script = ExtResource("1_r8ojw")
 level_name = "03 - Two of Us"
 level_hint = "Two switches. Two versions of you."
+
+[node name="Backdrop" type="Node2D" parent="." unique_id=1487556434]
+script = ExtResource("2_jgt0v")
 
 [node name="Floor" type="StaticBody2D" parent="." unique_id=723629486]
 position = Vector2(480, 490)

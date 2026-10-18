@@ -8,34 +8,22 @@ const LEVEL_SCENES = [
 ]
 
 @onready var level_container: Node2D = $LevelContainer
-@onready var level_label: Label = $HUD/LevelLabel
-@onready var status_label: Label = $HUD/StatusLabel
-@onready var hint_label: Label = $HUD/HintLabel
-@onready var message_label: Label = $HUD/MessageLabel
+@onready var hud: CamcorderHUD = $HUD/OSD
 @onready var vhs: VHSOverlay = $FX
 @onready var sfx: SoundEffects = $SFX
 
 var current_level: LevelController = null
 var current_level_index = 0
 var game_finished: bool = false
-var feedback_remaining: float = 0.0
 
 func _ready() -> void:
 	load_level(0)
 
-func _process(delta: float) -> void:
-	if feedback_remaining > 0.0:
-		feedback_remaining -= delta
-
-		if feedback_remaining <= 0.0:
-			feedback_remaining = 0.0
-			message_label.text = ""
-
+func _process(_delta: float) -> void:
 	if game_finished:
 		return
 
 	if is_instance_valid(current_level):
-		status_label.text = current_level.recorder.get_status_text()
 		current_level.player.set_recording_visual(current_level.recorder.state == TapeRecorder.State.RECORDING)
 		vhs.set_wear(current_level.recorder.get_wear_ratio())
 
@@ -76,13 +64,8 @@ func load_level(index: int) -> void:
 	level_container.add_child(current_level)
 	current_level.completed.connect(_on_level_completed)
 
-	current_level.feedback_requested.connect(_show_feedback)
-	message_label.text = ""
-	feedback_remaining = 0.0
-
-	level_label.text = current_level.level_name
-	hint_label.text = current_level.level_hint
-
+	current_level.feedback_requested.connect(_on_feedback)
+	hud.begin_level(current_level.level_name, current_level.level_hint, current_level.recorder)
 	current_level.recorder.tape_event.connect(_on_tape_event)
 	
 	vhs.reset_effect()
@@ -107,22 +90,20 @@ func finish_game() -> void:
 	vhs.reset_effect()
 	sfx.play_event(&"complete")
 
-	level_label.text = "SIGNAL RESTORED"
-	status_label.text = "You escaped the facility."
-	hint_label.text = "Press Enter to play again."
+	hud.show_ending()
 
 func _on_level_completed() -> void:
 	call_deferred("advance_level")
 
-func _show_feedback(message: String) -> void:
-	if message.begins_with("TRACKING LOST"):
+func _on_feedback(message: String) -> void:
+	var danger = message.begins_with("TRACKING_LOST")
+	if danger:
 		vhs.trigger_rewind()
 		sfx.play_event(&"hit")
-	elif message.begins_with("SYNC"):
+	else:
 		sfx.play_event(&"sync")
 		
-	message_label.text = message
-	feedback_remaining = 0.9
+	hud.show_feedback(message, danger)
 
 func _on_tape_event(event_name: StringName) -> void:
 	sfx.play_event(event_name)
